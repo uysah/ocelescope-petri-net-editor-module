@@ -3,7 +3,7 @@ import type { ObjectCentricPetriNet } from "@r4pm/components";
 import { Box, Button, Stack, Text, Splitter, ScrollArea, Group, Card, TextInput, NumberInput, SegmentedControl, Select, Autocomplete } from "@mantine/core";
 import { DownloadIcon, PlayIcon, Upload } from "lucide-react";
 import { lazy, useEffect, useState } from "react";
-import type { SplitterPaneSize, UseSplitterReturnValue } from "@mantine/hooks";
+import type { UseSplitterReturnValue } from "@mantine/hooks";
 import { addPlace, addTransition, addArc} from "../../util/OCPN/editor_functions";
 import { useRef, useCallback } from "react";
 import { EditorMode } from "../main";

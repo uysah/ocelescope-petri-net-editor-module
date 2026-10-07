@@ -34,6 +34,7 @@ export type EditorActions = {
   runLayout: () => Promise<void>;
   addArc: (source: string, target: string, weight: number) => void;
   deleteSelected: () => void;
+  loadNet: (nodes: PetriNetNode[], edges: Edge<ArcData>[]) => void;
 };
 
 export const EditorFunction = ({
@@ -147,8 +148,14 @@ export const EditorFunction = ({
     deleteElements({ nodes: selectedNodes, edges: selectedEdges });
   };
 
+  const loadNet = async (newNodes: PetriNetNode[], newEdges: Edge<ArcData>[]) => {
+  setNodes(newNodes);
+  setEdges(newEdges);
+  onNodesChange(newNodes);
+  };
+
   useEffect(()=>{
-    onReady({addPlace,addTransition, updateTransitionLabel, updatePlaceTokens, updatePlaceFinalTokens, getGraph, runLayout, addArc, deleteSelected})
+    onReady({addPlace,addTransition, updateTransitionLabel, updatePlaceTokens, updatePlaceFinalTokens, getGraph, runLayout, addArc, deleteSelected, loadNet})
   })
   return <HideToolbarButtons labels={["Place", "Transition", "Layout"]} />;
 }

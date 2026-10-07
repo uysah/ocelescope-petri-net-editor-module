@@ -1,12 +1,13 @@
 from fastapi import APIRouter, UploadFile
 import tempfile
 import os
-from r4pm.petri_net import export_pnml  
+from r4pm.petri_net import export_pnml, import_pnml
 from fastapi.responses import PlainTextResponse
-from ocelescope_module_ocpn_editor.util.convert_format import convert_to_PN, convert_from_PN
+from ocelescope_module_ocpn_editor.util.convert_format import convert_to_OCPN, convert_from_OCPN
 from ocelescope_module_ocpn_editor.model.editor_ocpn import OcpnExportRequest, OcpnImportResponse
 from ocelescope import PetriNet
-
+from ocelescope_module_ocpn_editor.util.convert_format import convert_from_pnml
+from ocelescope_module_ocpn_editor.model.editor_pn import ImportResponse
 
 router = APIRouter()
 
@@ -25,10 +26,25 @@ def export_petri_net_pnml(net: dict) -> PlainTextResponse:
 
     return PlainTextResponse(content=pnml_text)
 
+@router.post("/petri-net/import/pnml", operation_id="importPetriNetPnml")
+async def import_petri_net_pnml(file: UploadFile) -> ImportResponse:
+    input = await file.read()
+
+    with tempfile.NamedTemporaryFile(suffix=".pnml", delete=False) as tmp:
+        tmp.write(input)
+        tmp_path = tmp.name
+
+    try:
+        net = import_pnml(tmp_path)
+    finally:
+        os.unlink(tmp_path)
+
+    return convert_from_pnml(net)
+
 
 @router.post("/ocpn/export/ocelescope", operation_id="exportOCPN")
 def export_ocpn(ocpn: OcpnExportRequest) -> PlainTextResponse:
-    pnet = convert_to_PN(ocpn)
+    pnet = convert_to_OCPN(ocpn)
 
     with tempfile.NamedTemporaryFile(suffix=".ocelescope", delete=False) as tmp:
         tmp_path = tmp.name
@@ -47,4 +63,4 @@ def export_ocpn(ocpn: OcpnExportRequest) -> PlainTextResponse:
 async def import_ocpn(file: UploadFile) -> OcpnImportResponse:
     input = await file.read()
     pnet = PetriNet.model_validate_json(input)
-    return convert_from_PN(pnet)
+    return convert_from_OCPN(pnet)

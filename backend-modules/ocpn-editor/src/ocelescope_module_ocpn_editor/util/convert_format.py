@@ -1,8 +1,10 @@
 from ocelescope.resource.default.petri_net import Arc, ArcType, PetriNet, Place, Transition
 from ocelescope_module_ocpn_editor.model.editor_ocpn import OcpnExportRequest, OcpnImportResponse, EditorArc, EditorOCPN, EditorPlace, EditorTransition
+from ocelescope_module_ocpn_editor.model.editor_pn import ImportResponse, ImportPlace,ImportArc,ImportTransition
 
 
-def convert_to_PN(ocpn: OcpnExportRequest) -> PetriNet:
+
+def convert_to_OCPN(ocpn: OcpnExportRequest) -> PetriNet:
     net = ocpn.petri_net
     object_types = ocpn.place_object_type
     in_out_mult = ocpn.place_in_out_mult if ocpn.place_in_out_mult is not None else {}
@@ -41,7 +43,7 @@ def convert_to_PN(ocpn: OcpnExportRequest) -> PetriNet:
     return ocpn
 
 
-def convert_from_PN(ocpn:PetriNet) -> OcpnImportResponse:
+def convert_from_OCPN(ocpn:PetriNet) -> OcpnImportResponse:
     places = []
     place_object_type = {}
   
@@ -85,3 +87,31 @@ def convert_from_PN(ocpn:PetriNet) -> OcpnImportResponse:
         place_object_type=place_object_type,
         place_in_out_mult=place_in_out_mult,
     )
+
+
+def convert_from_pnml(net:dict) -> ImportResponse:
+    initial_marking = net.get("initial_marking") if net.get("initial_marking") is not None else {} 
+    final_markings = net.get("final_markings") or []
+    final_marking = final_markings[0] if final_markings else {}
+
+    places = [
+        ImportPlace(
+            id=pid,
+            tokens=initial_marking.get(pid,0),
+            final_tokens=final_marking.get(pid,0)
+        ) 
+        for pid in net.get("places",{})
+    ]
+    transitions = [
+        ImportTransition(
+            id=tid,
+            label= transition.get("label")
+        )
+        for tid, transition in net.get("transitions",{}).items()
+    ]
+    arcs = []
+    for arc in net.get("arcs", []):
+        source, target = arc["from_to"]["nodes"]
+        arcs.append(ImportArc(source=source, target=target, weight=arc.get("weight", 1)))
+
+    return ImportResponse(places=places, transitions=transitions, arcs=arcs)

@@ -4,12 +4,13 @@ import { Editor, type PetriNetNode } from "@r4pm/components/petri";
 import { Box, Button, Stack, Text, Divider, NumberInput, TextInput, Splitter, ScrollArea, Group, Select, Card, MultiSelect, SegmentedControl} from "@mantine/core";
 import { DownloadIcon, PlayIcon, Upload } from "lucide-react";
 import { useRef, useState } from "react";
-import type { SplitterPaneSize } from "@mantine/hooks";
+import type { UseSplitterReturnValue } from "@mantine/hooks";
 import { wasmLayout } from "@r4pm/components/rust-layout/wasm";
-import { useExportPetriNetPnml } from "../../api/ocpnEditor";
+import { useExportPetriNetPnml, useImportPetriNetPnml } from "../../api/ocpnEditor";
 import {buildPetriNet, downloadFile} from "../../util/Petri Net/export_pnml";
 import { buildArcSourceOptions, buildArcTargetOptions } from "../../util/Petri Net/add_arcs";
 import { EditorFunction, type SelectedNode, type EditorActions } from "../../util/Petri Net/PnEditor_function";
+import {loadPnml} from "../../util/Petri Net/import_pn";
 import { EditorMode } from "../main";
 import {ViewerExportFrame} from "@r4pm/components"
 
@@ -21,10 +22,8 @@ const PetriNetEditor = (
     onModeChange: (mode:EditorMode) => void;
   }
 ) => {
-  const COLLAPSED_SIZES: SplitterPaneSize[] = [75, 25];
 
   const [selected, setSelected] = useState<SelectedNode>(null);
-  const [sizes, setSizes] = useState<SplitterPaneSize[]>(COLLAPSED_SIZES);
   const [arcSource, setArcSource] = useState<string | null>(null);
   const [arcTarget, setArcTarget] = useState<string[]>([]);
   const [arcWeight, setArcWeight] = useState(1);
@@ -34,11 +33,11 @@ const PetriNetEditor = (
   const [newTransitionLabel, setNewTransitionLabel] = useState("New Transition");
 
   const actionsRef = useRef<EditorActions | null>(null);
-
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const splitterRef = useRef<UseSplitterReturnValue>(null);
 
 
   const { mutateAsync: exportPnml} = useExportPetriNetPnml();
-
   const handleDownload = async () => {
     const graph = actionsRef.current?.getGraph();
     if (!graph) return;
@@ -46,6 +45,19 @@ const PetriNetEditor = (
     const pnml = await exportPnml({ data: net });
     downloadFile("petri-net.pnml", pnml as string, "application/xml");
   };
+
+  const handleImportClick = () => fileInputRef.current?.click();
+
+
+  const {mutateAsync: importPnml} = useImportPetriNetPnml()
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const importedPN = await importPnml({data:{file}})
+    const [nodes, edges] = loadPnml(importedPN.places, importedPN.transitions, importedPN.arcs)
+    actionsRef.current?.loadNet(nodes, edges);
+  }
+
 
   const sourceOptions = buildArcSourceOptions(nodes);
   const targetOptions = buildArcTargetOptions(nodes, arcSource);
@@ -63,8 +75,7 @@ const PetriNetEditor = (
 
 return (
   <Splitter
-    sizes={sizes}
-    onSizeChange={setSizes}
+    splitterRef={splitterRef}
     lineSize={4}
     handleColor="var(--mantine-color-default-border)"
     h={"100%"}
@@ -81,8 +92,13 @@ return (
         <Text fw={600} size="lg">Petri-Net Editor</Text>
         <Group>
           <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pnml"
+                style={{ display: "none" }}
+                onChange={handleFileSelected}
           />
-            <Button leftSection={<Upload size={16} />} variant="default">
+            <Button leftSection={<Upload size={16} />} variant="default" onClick={handleImportClick}>
               Upload Petri-Net
             </Button>
           <Button leftSection={<DownloadIcon size={16} />} variant="default" onClick={handleDownload}>
