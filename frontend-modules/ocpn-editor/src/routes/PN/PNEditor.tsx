@@ -1,7 +1,7 @@
 import "@r4pm/components/styles.css";
 import { ReactFlowProvider } from "@xyflow/react";
 import { Editor, type PetriNetNode } from "@r4pm/components/petri";
-import { Box, Button, Stack, Text, Divider, NumberInput, TextInput, Splitter, ScrollArea, Group, Select, Card, MultiSelect, SegmentedControl} from "@mantine/core";
+import { Box, Button, Stack, Text, Divider, NumberInput, TextInput, Splitter, ScrollArea, Group, Select, Card, MultiSelect, SegmentedControl, Tooltip, ActionIcon} from "@mantine/core";
 import { DownloadIcon, PlayIcon, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import type { UseSplitterReturnValue } from "@mantine/hooks";
@@ -90,23 +90,36 @@ return (
         style={{ borderBottom: "2px solid var(--mantine-color-default-border)" }}
       >
         <Text fw={600} size="lg">Petri-Net Editor</Text>
-        <Group>
+        <Group gap={4} p={4} style={{ border: "1px solid var(--mantine-color-default-border)", borderRadius: "var(--mantine-radius-md)" }}>
           <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pnml"
-                style={{ display: "none" }}
-                onChange={handleFileSelected}
+            ref={fileInputRef}
+            type="file"
+            accept=".ocelescope"
+            style={{ display: "none" }}
+            onChange={handleFileSelected}
           />
-            <Button leftSection={<Upload size={16} />} variant="default" onClick={handleImportClick}>
-              Upload Petri-Net
-            </Button>
-          <Button leftSection={<DownloadIcon size={16} />} variant="default" onClick={handleDownload}>
-            Export PNML
-          </Button>
-          <Button variant="filled" leftSection={<PlayIcon size={16}/>} onClick={()=> actionsRef.current?.runLayout()}>
-            Run Layout
-          </Button>
+
+          <Tooltip label="Upload OCPN" withArrow>
+            <ActionIcon variant="subtle" color="gray" size="md" aria-label="Upload OCPN" onClick={handleImportClick}>
+              <Upload size={16} />
+            </ActionIcon>
+          </Tooltip>
+
+          <Divider orientation="vertical" />
+
+          <Tooltip label="Export OCPN" withArrow>
+            <ActionIcon variant="subtle" color="gray" size="md" aria-label="Download OCPN" onClick={handleDownload}>
+              <DownloadIcon size={16} />
+            </ActionIcon>
+          </Tooltip>
+
+          <Divider orientation="vertical" />
+
+          <Tooltip label="Run Layout" withArrow>
+            <ActionIcon variant="filled" color="blue" size="md" radius="md" aria-label="Run Layout" onClick={actionsRef.current?.runLayout}>
+              <PlayIcon size={16} />
+            </ActionIcon>
+          </Tooltip>
         </Group>
       </Group>
 

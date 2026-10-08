@@ -1,6 +1,6 @@
 import "@r4pm/components/styles.css";
 import type { ObjectCentricPetriNet } from "@r4pm/components";
-import { Box, Button, Stack, Text, Splitter, ScrollArea, Group, Card, TextInput, NumberInput, SegmentedControl, Select, Autocomplete } from "@mantine/core";
+import { Box, Button, Stack, Text, Splitter, ScrollArea, Group, Card, TextInput, NumberInput, SegmentedControl, Select, Autocomplete, ActionIcon,Tooltip,Divider } from "@mantine/core";
 import { DownloadIcon, PlayIcon, Upload } from "lucide-react";
 import { lazy, useEffect, useState } from "react";
 import type { UseSplitterReturnValue } from "@mantine/hooks";
@@ -145,7 +145,7 @@ const Editor = (
             <Text fw={600} size="lg">
               Object-Centric Petri-Net Editor
             </Text>
-            <Group>
+            <Group gap={4} p={4} style={{ border: "1px solid var(--mantine-color-default-border)", borderRadius: "var(--mantine-radius-md)" }}>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -153,15 +153,28 @@ const Editor = (
                 style={{ display: "none" }}
                 onChange={handleFileSelected}
               />
-              <Button leftSection={<Upload size={16} />} variant="default" onClick={handleImportClick}>
-                Upload OCPN
-              </Button>
-              <Button leftSection={<DownloadIcon size={16} />} variant="default" onClick={handleDownload}>
-                Export OCPN
-              </Button>
-              <Button leftSection={<PlayIcon size={16}/>} onClick={handleRunLayout}>
-                Run Layout
-              </Button>
+
+              <Tooltip label="Upload OCPN" withArrow>
+                <ActionIcon variant="subtle" color="gray" size="md" aria-label="Upload OCPN" onClick={handleImportClick}>
+                  <Upload size={16} />
+                </ActionIcon>
+              </Tooltip>
+
+              <Divider orientation="vertical" />
+
+              <Tooltip label="Export OCPN" withArrow>
+                <ActionIcon variant="subtle" color="gray" size="md" aria-label="Download OCPN" onClick={handleDownload}>
+                  <DownloadIcon size={16} />
+                </ActionIcon>
+              </Tooltip>
+
+              <Divider orientation="vertical" />
+
+              <Tooltip label="Run Layout" withArrow>
+                <ActionIcon variant="filled" color="blue" size="md" radius="md" aria-label="Run Layout" onClick={handleRunLayout}>
+                  <PlayIcon size={16} />
+                </ActionIcon>
+              </Tooltip>
             </Group>
           </Group>
           <Box pos="relative" style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
