@@ -30,7 +30,7 @@ const PetriNetEditor = (
   const [nodes, setNodesForToolbox] = useState<PetriNetNode[]>([]);
   const [newPlaceTokens, setNewPlaceTokens] = useState(0);
   const [newPlaceFinalTokens, setNewPlaceFinalTokens] = useState(0);
-  const [newTransitionLabel, setNewTransitionLabel] = useState("New Transition");
+  const [newTransitionLabel, setNewTransitionLabel] = useState("");
 
   const actionsRef = useRef<EditorActions | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

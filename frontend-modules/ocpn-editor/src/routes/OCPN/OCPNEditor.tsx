@@ -1,13 +1,14 @@
 import "@r4pm/components/styles.css";
 import type { ObjectCentricPetriNet } from "@r4pm/components";
 import { Box, Button, Stack, Text, Splitter, ScrollArea, Group, Card, TextInput, NumberInput, SegmentedControl, Select, Autocomplete, ActionIcon,Tooltip,Divider } from "@mantine/core";
-import { DownloadIcon, PlayIcon, Upload } from "lucide-react";
+import { DownloadIcon, PlayIcon, Upload, DatabaseArrowUp, DatabaseArrowDown } from "lucide-react";
 import { lazy, useEffect, useState } from "react";
 import type { UseSplitterReturnValue } from "@mantine/hooks";
 import { addPlace, addTransition, addArc} from "../../util/OCPN/editor_functions";
+import { SaveOCPNSession } from "../../util/OCPN/save_session";
 import { useRef, useCallback } from "react";
 import { EditorMode } from "../main";
-import { useExportOCPN, useImportOCPN } from "../../api/ocpnEditor";
+import { useExportOCPN, useImportOCPN, useSaveSession } from "../../api/ocpnEditor";
 import { downloadFile } from "../../util/Petri Net/export_pnml";
 
 
@@ -42,7 +43,7 @@ const Editor = (
   const [addedTypes, setAddedTypes] = useState<string[]>([]);
   const knownObjectTypes = Array.from(new Set([...objectTypes, ...addedTypes]));
 
-  const [newTransitionLabel, setNewTransitionLabel] = useState("New Transition");
+  const [newTransitionLabel, setNewTransitionLabel] = useState("");
 
   const [variableArcButton, setVariableArcButton] = useState(false);
   const [arcSource, setArcSource] = useState<string | null>(null);
@@ -54,7 +55,9 @@ const Editor = (
 
   const { mutateAsync: exportOcpn } = useExportOCPN();
   const { mutateAsync: importOcpn } = useImportOCPN();
+  const { mutateAsync: saveSession} = useSaveSession();
 
+  const [saveModalOpened, setSaveModalOpened] = useState(false);
 
   const handleDownload = async () => {
     const result = await exportOcpn({ data: net });
@@ -132,6 +135,7 @@ const Editor = (
   const canAddArc = !!arcSource && !!arcTarget;
 
   return (
+    <>
     <Splitter
       splitterRef={splitterRef}
       lineSize={4}
@@ -150,6 +154,9 @@ const Editor = (
             <Text fw={600} size="lg">
               Object-Centric Petri-Net Editor
             </Text>
+            <Group>
+
+            </Group>
             <Group gap={4} p={4} style={{ border: "1px solid var(--mantine-color-default-border)", borderRadius: "var(--mantine-radius-md)" }}>
               <input
                 ref={fileInputRef}
@@ -158,6 +165,21 @@ const Editor = (
                 style={{ display: "none" }}
                 onChange={handleFileSelected}
               />
+              <Tooltip label="Load from session" withArrow>
+                <ActionIcon variant="subtle" color="gray" size="md" aria-label="load from session">
+                  <DatabaseArrowUp size={16} />
+                </ActionIcon>
+              </Tooltip>
+
+              <Divider orientation="vertical" />
+
+              <Tooltip label="Save to session" withArrow>
+                <ActionIcon variant="subtle" color="gray" size="md" aria-label="save to session" onClick={() => setSaveModalOpened(true)}>
+                  <DatabaseArrowDown size={16} />
+                </ActionIcon>
+              </Tooltip>
+
+              <Divider orientation="vertical" />
 
               <Tooltip label="Upload OCPN" withArrow>
                 <ActionIcon variant="subtle" color="gray" size="md" aria-label="Upload OCPN" onClick={handleImportClick}>
@@ -167,7 +189,7 @@ const Editor = (
 
               <Divider orientation="vertical" />
 
-              <Tooltip label="Export OCPN" withArrow>
+              <Tooltip label="Download OCPN" withArrow>
                 <ActionIcon variant="subtle" color="gray" size="md" aria-label="Download OCPN" onClick={handleDownload}>
                   <DownloadIcon size={16} />
                 </ActionIcon>
@@ -313,6 +335,12 @@ const Editor = (
         </ScrollArea>
       </Splitter.Pane>
     </Splitter>
+    <SaveOCPNSession
+        opened={saveModalOpened}
+        onClose={() => setSaveModalOpened(false)}
+        onSave={(name) => saveSession({ data: seedNet, params: { name } })}
+      />
+    </>
   );
 };
 
