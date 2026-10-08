@@ -8,6 +8,7 @@ from ocelescope_module_ocpn_editor.model.editor_ocpn import OcpnExportRequest, O
 from ocelescope import PetriNet
 from ocelescope_module_ocpn_editor.util.convert_format import convert_from_pnml
 from ocelescope_module_ocpn_editor.model.editor_pn import ImportResponse
+from ocelescope_backend.app.dependencies import ApiOcel
 
 router = APIRouter()
 
@@ -64,3 +65,13 @@ async def import_ocpn(file: UploadFile) -> OcpnImportResponse:
     input = await file.read()
     pnet = PetriNet.model_validate_json(input)
     return convert_from_OCPN(pnet)
+
+
+@router.get("/{ocel_id}/objects/types", operation_id="objectTypes")
+def get_object_types(ocel:ApiOcel) -> list[str]:
+    return ocel.objects.types
+
+
+@router.get("/{ocel_id}/events/activities", operation_id="eventActivities")
+def get_event_activities(ocel:ApiOcel) -> list[str]:
+    return ocel.events.activities

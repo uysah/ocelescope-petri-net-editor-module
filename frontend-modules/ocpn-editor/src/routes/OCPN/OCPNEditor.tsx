@@ -21,10 +21,12 @@ const emptyNet: ObjectCentricPetriNet = {
 
 const Editor = (
   {
-    mode,onModeChange
+    mode,onModeChange, objectTypes, eventActivities
   }:{
     mode:EditorMode;
     onModeChange: (mode:EditorMode) => void;
+    objectTypes: string[];
+    eventActivities: string[]
   }
 ) => {
 
@@ -32,16 +34,19 @@ const Editor = (
   const [mounted, setMounted] = useState(false);
   const [net, setNet] = useState<ObjectCentricPetriNet>(emptyNet);
   const [seedNet, setSeedNet] = useState<ObjectCentricPetriNet>(emptyNet);
+  const [remountKey, setRemountKey] = useState(0);
+
   const [newPlaceObjectType, setNewPlaceObjectType] = useState("");
   const [newPlaceTokens, setNewPlaceTokens] = useState(0);
   const [newPlaceFinalTokens, setNewPlaceFinalTokens] = useState(0);
-  const [remountKey, setRemountKey] = useState(0);
+  const [addedTypes, setAddedTypes] = useState<string[]>([]);
+  const knownObjectTypes = Array.from(new Set([...objectTypes, ...addedTypes]));
+
   const [newTransitionLabel, setNewTransitionLabel] = useState("New Transition");
+
   const [variableArcButton, setVariableArcButton] = useState(false);
   const [arcSource, setArcSource] = useState<string | null>(null);
   const [arcTarget, setArcTarget] = useState<string | null>(null);
-  const [knownObjectTypes, setKnownObjectTypes] = useState<string[]>([]);
-
 
   const netUpdateTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -76,7 +81,7 @@ const Editor = (
     const updated = addPlace(net, newPlaceObjectType, newPlaceTokens, newPlaceFinalTokens);
     setSeedNet(updated);
     setRemountKey((k) => k + 1);
-    setKnownObjectTypes((prev) =>
+    setAddedTypes((prev) =>
       prev.includes(newPlaceObjectType) ? prev : [...prev, newPlaceObjectType],
     );
     setNewPlaceTokens(0);
@@ -245,11 +250,12 @@ const Editor = (
                 <Text size="xs" c="dimmed" mb="xs">
                   Set the transition label.
                 </Text>
-                <TextInput 
+                <Autocomplete 
                   label="Transition Label" 
                   mb="xs" 
                   value={newTransitionLabel} 
-                  onChange={(e) => setNewTransitionLabel(e.currentTarget.value)} 
+                  onChange={setNewTransitionLabel} 
+                  data={eventActivities}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
