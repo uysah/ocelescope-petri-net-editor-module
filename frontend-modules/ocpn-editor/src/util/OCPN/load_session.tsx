@@ -18,7 +18,6 @@ export const LoadOCPNSession = ({
       <Stack>
         <ResourceSelect
           label="Model"
-          type="PetriNet"
           description="Select a Petri Net to load into the editor"
           value={resourceId}
           onChange={(newResourceId) => setResourceId(newResourceId as string)}
