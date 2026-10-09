@@ -93,12 +93,15 @@ importers:
       '@mantine/hooks':
         specifier: 9.4.0
         version: 9.4.0(react@19.3.0)
+      '@mantine/notifications':
+        specifier: ^9.7.1
+        version: 9.7.1(@mantine/core@9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@mantine/hooks@9.4.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@ocelescope/core':
         specifier: 'catalog:'
-        version: 0.8.0(b08f92f0da395988625e26ee252d96f7)
+        version: 0.8.0(81198f7b91b744d1da2785120634bc49)
       '@ocelescope/management':
         specifier: 'catalog:'
-        version: 0.8.0(50208731bbc8d30b8b2637b978307cfa)
+        version: 0.8.0(0c9bf3b101e75adec1f8db4381baefb3)
       '@r4pm/components':
         specifier: ^0.3.2
         version: 0.3.2(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(plotly.js@4.1.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -136,6 +139,9 @@ importers:
       '@mantine/hooks':
         specifier: 9.4.0
         version: 9.4.0(react@19.3.0)
+      '@mantine/notifications':
+        specifier: ^9.7.1
+        version: 9.7.1(@mantine/core@9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@mantine/hooks@9.4.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@r4pm/components':
         specifier: ^0.3.2
         version: 0.3.2(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(plotly.js@4.1.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -154,7 +160,7 @@ importers:
         version: 0.8.0(@tanstack/react-query@5.104.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)(zod@4.6.5)
       '@ocelescope/core':
         specifier: 'catalog:'
-        version: 0.8.0(b08f92f0da395988625e26ee252d96f7)
+        version: 0.8.0(81198f7b91b744d1da2785120634bc49)
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.104.0(react@19.3.0)
@@ -579,16 +585,16 @@ packages:
     peerDependencies:
       react: ^19.2.0
 
-  '@mantine/notifications@9.6.3':
-    resolution: {integrity: sha512-1imtNfBwZ0JBDrg3ohVuZLnJvwRVhb7eWFbcfz5QFSy7hbM/MereURExWUGbZRBiJhQz850Aj6fVSEAviK6vdg==}
+  '@mantine/notifications@9.7.1':
+    resolution: {integrity: sha512-gmN+rTrjwYFJqaIqDQtQfoTJ/OR0wSxqxIihOHD5/S/sYUycVi9wDqK4tub5y8x0HeQH4kNkehPMN4l1Uk0A6A==}
     peerDependencies:
-      '@mantine/core': 9.6.3
-      '@mantine/hooks': 9.6.3
+      '@mantine/core': 9.7.1
+      '@mantine/hooks': 9.7.1
       react: ^19.2.0
       react-dom: ^19.2.0
 
-  '@mantine/store@9.6.3':
-    resolution: {integrity: sha512-EdD0QAn5HpsAKbvZwz7cqzq4E+4UpXCWK3hK5SR/O/WFtSAm0tUIyKBcrQ9baPRoQknfhOBmN7A17K+PdOzGqg==}
+  '@mantine/store@9.7.1':
+    resolution: {integrity: sha512-CYCQHWt7zFrUe2kVQmFAWnQaZbiDUoN2VeMJBI/vf1XybGj+itTEB6cnvoX4C8yOrln3sXe4BIoIf46pUhnEhA==}
     peerDependencies:
       react: ^19.2.0
 
@@ -3950,16 +3956,16 @@ snapshots:
     dependencies:
       react: 19.3.0
 
-  '@mantine/notifications@9.6.3(@mantine/core@9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@mantine/hooks@9.4.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@mantine/notifications@9.7.1(@mantine/core@9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@mantine/hooks@9.4.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@mantine/core': 9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@mantine/hooks': 9.4.0(react@19.3.0)
-      '@mantine/store': 9.6.3(react@19.3.0)
+      '@mantine/store': 9.7.1(react@19.3.0)
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
       react-transition-group: 4.4.5(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
 
-  '@mantine/store@9.6.3(react@19.3.0)':
+  '@mantine/store@9.7.1(react@19.3.0)':
     dependencies:
       react: 19.3.0
 
@@ -4069,12 +4075,12 @@ snapshots:
       - typescript
       - zod
 
-  '@ocelescope/core@0.8.0(b08f92f0da395988625e26ee252d96f7)':
+  '@ocelescope/core@0.8.0(81198f7b91b744d1da2785120634bc49)':
     dependencies:
       '@mantine/core': 9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@mantine/dropzone': 9.6.3(@mantine/core@9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@mantine/hooks': 9.4.0(react@19.3.0)
-      '@mantine/notifications': 9.6.3(@mantine/core@9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@mantine/hooks@9.4.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@mantine/notifications': 9.7.1(@mantine/core@9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@mantine/hooks@9.4.0(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@marko19907/string-to-color': 1.0.2
       '@ocelescope/api-base': 0.8.0(@ocelescope/api-client@0.8.0(axios@1.20.0(debug@4.4.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zod@4.6.5)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))))(@tanstack/react-query@5.104.0(react@19.3.0))(axios@1.20.0(debug@4.4.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@ocelescope/api-client': 0.8.0(axios@1.20.0(debug@4.4.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zod@4.6.5)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))
@@ -4095,13 +4101,13 @@ snapshots:
       zod: 4.6.5
       zustand: 5.0.15(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
 
-  '@ocelescope/management@0.8.0(50208731bbc8d30b8b2637b978307cfa)':
+  '@ocelescope/management@0.8.0(0c9bf3b101e75adec1f8db4381baefb3)':
     dependencies:
       '@mantine/core': 9.6.3(@mantine/hooks@9.4.0(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@mantine/hooks': 9.4.0(react@19.3.0)
       '@marko19907/string-to-color': 1.0.2
       '@ocelescope/api-base': 0.8.0(@ocelescope/api-client@0.8.0(axios@1.20.0(debug@4.4.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zod@4.6.5)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))))(@tanstack/react-query@5.104.0(react@19.3.0))(axios@1.20.0(debug@4.4.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@ocelescope/core': 0.8.0(b08f92f0da395988625e26ee252d96f7)
+      '@ocelescope/core': 0.8.0(81198f7b91b744d1da2785120634bc49)
       '@ocelescope/resources': 0.8.0(d3cb667879e8f720a29906a99c016d09)
       dayjs: 1.11.23
       lucide-react: 1.48.0(react@19.3.0)

@@ -10,6 +10,7 @@ import { useRef, useCallback } from "react";
 import { EditorMode } from "../main";
 import { useExportOCPN, useImportOCPN, useSaveSession } from "../../api/ocpnEditor";
 import { downloadFile } from "../../util/Petri Net/export_pnml";
+import { notifications } from "@mantine/notifications";
 
 
 const OcpnEditorPanel = lazy(() => import("./OcpnEditorPanel"));
@@ -58,6 +59,7 @@ const Editor = (
   const { mutateAsync: saveSession} = useSaveSession();
 
   const [saveModalOpened, setSaveModalOpened] = useState(false);
+  const [saveSessionNotification, setSaveSessionNotification] = useState(false);
 
   const handleDownload = async () => {
     const result = await exportOcpn({ data: net });
@@ -336,9 +338,14 @@ const Editor = (
       </Splitter.Pane>
     </Splitter>
     <SaveOCPNSession
-        opened={saveModalOpened}
-        onClose={() => setSaveModalOpened(false)}
-        onSave={(name) => saveSession({ data: seedNet, params: { name } })}
+      opened={saveModalOpened}
+      onClose={() => setSaveModalOpened(false)}
+      onSave={(name) => {
+        saveSession({ data: seedNet, params: { name } });
+        notifications.show({
+        title: "Saved to session",
+        message: "OCPN has been saved to session",
+          })}}
       />
     </>
   );

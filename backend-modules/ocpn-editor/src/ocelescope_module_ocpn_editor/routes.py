@@ -80,5 +80,5 @@ def get_event_activities(ocel:ApiOcel) -> list[str]:
 
 @router.post("/ocpn/save/session", operation_id="saveSession")
 def save_to_session_example(session: ApiSession, ocpn: OcpnExportRequest, name:str):
-  pnet = convert_to_OCPN(ocpn)
-  session.add_resource(ResourceStore.from_resource(pnet, name=name))
+    pnet = convert_to_OCPN(ocpn)
+    session.add_resource(ResourceStore.from_resource(pnet, name=name))
