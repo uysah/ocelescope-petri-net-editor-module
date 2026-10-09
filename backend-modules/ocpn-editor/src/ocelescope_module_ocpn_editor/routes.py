@@ -10,6 +10,7 @@ from ocelescope_module_ocpn_editor.util.convert_format import convert_from_pnml
 from ocelescope_module_ocpn_editor.model.editor_pn import ImportResponse
 from ocelescope_backend.app.dependencies import ApiOcel, ApiSession
 from ocelescope_backend.app.internal.model.resource import ResourceStore
+from typing import cast
 
 router = APIRouter()
 
@@ -78,7 +79,14 @@ def get_event_activities(ocel:ApiOcel) -> list[str]:
     return ocel.events.activities
 
 
-@router.post("/ocpn/save/session", operation_id="saveSession")
-def save_to_session_example(session: ApiSession, ocpn: OcpnExportRequest, name:str):
+@router.post("/ocpn/export/session", operation_id="saveSession")
+def save_to_session(session: ApiSession, ocpn: OcpnExportRequest, name:str):
     pnet = convert_to_OCPN(ocpn)
     session.add_resource(ResourceStore.from_resource(pnet, name=name))
+
+
+@router.post("/ocpn/import/session", operation_id="loadSession")
+async def load_from_session(session:ApiSession, resource_id: str | None = None) -> OcpnImportResponse:
+    resource_store = cast(PetriNet,session.get_resource(resource_id))
+    petri_net = PetriNet(**resource_store.data)
+    return convert_from_OCPN(petri_net)

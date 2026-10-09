@@ -8,9 +8,10 @@ import { addPlace, addTransition, addArc} from "../../util/OCPN/editor_functions
 import { SaveOCPNSession } from "../../util/OCPN/save_session";
 import { useRef, useCallback } from "react";
 import { EditorMode } from "../main";
-import { useExportOCPN, useImportOCPN, useSaveSession } from "../../api/ocpnEditor";
+import { useExportOCPN, useImportOCPN, useLoadSession, useSaveSession } from "../../api/ocpnEditor";
 import { downloadFile } from "../../util/Petri Net/export_pnml";
 import { notifications } from "@mantine/notifications";
+import { LoadOCPNSession } from "../../util/OCPN/load_session";
 
 
 const OcpnEditorPanel = lazy(() => import("./OcpnEditorPanel"));
@@ -50,6 +51,11 @@ const Editor = (
   const [arcSource, setArcSource] = useState<string | null>(null);
   const [arcTarget, setArcTarget] = useState<string | null>(null);
 
+  const [saveModalOpened, setSaveModalOpened] = useState(false);
+  const [loadModalOpened, setLoadModalOpened] = useState(false);
+
+
+
   const netUpdateTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const splitterRef = useRef<UseSplitterReturnValue>(null);
@@ -57,9 +63,8 @@ const Editor = (
   const { mutateAsync: exportOcpn } = useExportOCPN();
   const { mutateAsync: importOcpn } = useImportOCPN();
   const { mutateAsync: saveSession} = useSaveSession();
+  const { mutateAsync: loadSession } = useLoadSession();
 
-  const [saveModalOpened, setSaveModalOpened] = useState(false);
-  const [saveSessionNotification, setSaveSessionNotification] = useState(false);
 
   const handleDownload = async () => {
     const result = await exportOcpn({ data: net });
@@ -79,7 +84,6 @@ const Editor = (
 
     e.target.value = "";
   };
-
 
   const handleAddPlace = () => {
     if (!newPlaceObjectType) return;
@@ -168,7 +172,7 @@ const Editor = (
                 onChange={handleFileSelected}
               />
               <Tooltip label="Load from session" withArrow>
-                <ActionIcon variant="subtle" color="gray" size="md" aria-label="load from session">
+                <ActionIcon variant="subtle" color="gray" size="md" aria-label="load from session" onClick={() => setLoadModalOpened(true)}>
                   <DatabaseArrowUp size={16} />
                 </ActionIcon>
               </Tooltip>
@@ -347,6 +351,16 @@ const Editor = (
         message: "OCPN has been saved to session",
           })}}
       />
+    <LoadOCPNSession
+      opened={loadModalOpened}
+      onClose={() => setLoadModalOpened(false)}
+      onLoad={async (resourceId) => {
+        const result = await loadSession({ params: { resource_id: resourceId } });
+        setSeedNet(result as ObjectCentricPetriNet);
+        setNet(result as ObjectCentricPetriNet);
+        setRemountKey((k) => k + 1);
+      }}
+    />
     </>
   );
 };

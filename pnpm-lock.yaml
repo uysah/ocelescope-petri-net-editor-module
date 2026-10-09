@@ -39,6 +39,9 @@ catalogs:
     '@ocelescope/management':
       specifier: ^0.8.0
       version: 0.8.0
+    '@ocelescope/resources':
+      specifier: ^0.8.0
+      version: 0.8.0
     '@tanstack/react-query':
       specifier: ^5.90.21
       version: 5.104.0
@@ -161,6 +164,9 @@ importers:
       '@ocelescope/core':
         specifier: 'catalog:'
         version: 0.8.0(81198f7b91b744d1da2785120634bc49)
+      '@ocelescope/resources':
+        specifier: 'catalog:'
+        version: 0.8.0(d3cb667879e8f720a29906a99c016d09)
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.104.0(react@19.3.0)
